@@ -13,4 +13,5 @@
           and item_type = #{apartmentType}
           and item_id = #{id}
     </select>
+
 </mapper>

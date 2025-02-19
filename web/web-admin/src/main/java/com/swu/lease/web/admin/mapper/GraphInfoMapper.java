@@ -16,6 +16,8 @@ import java.util.List;
 public interface GraphInfoMapper extends BaseMapper<GraphInfo> {
 
     List<GraphVo> getUrlById(Integer apartmentType, Long id);
+
+
 }
 
 

@@ -151,7 +151,6 @@ public class ApartmentInfoServiceImpl extends ServiceImpl<ApartmentInfoMapper, A
         if (apartmentInfo == null) {
             return null;
         }
-        System.out.println(ItemType.APARTMENT.getCode().getClass());
         ApartmentDetailVo apartmentDetailVo = new ApartmentDetailVo();
         BeanUtils.copyProperties(apartmentInfo, apartmentDetailVo);
         //查询图片信息并构造返回体
