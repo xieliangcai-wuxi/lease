@@ -1,5 +1,7 @@
 package com.swu.lease.web.admin.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.swu.lease.model.entity.ViewAppointment;
 import com.swu.lease.web.admin.vo.appointment.AppointmentQueryVo;
 import com.swu.lease.web.admin.vo.appointment.AppointmentVo;
@@ -13,6 +15,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface ViewAppointmentMapper extends BaseMapper<ViewAppointment> {
 
+
+    IPage<AppointmentVo> selectAppointmentVoBypage(Page<AppointmentVo> appointmentVoPage, AppointmentQueryVo queryVo);
 }
 
 
