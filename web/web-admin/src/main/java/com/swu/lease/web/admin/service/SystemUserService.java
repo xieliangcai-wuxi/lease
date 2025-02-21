@@ -1,5 +1,6 @@
 package com.swu.lease.web.admin.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.swu.lease.model.entity.SystemUser;
 import com.swu.lease.web.admin.vo.system.user.SystemUserItemVo;
 import com.swu.lease.web.admin.vo.system.user.SystemUserQueryVo;
@@ -13,4 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface SystemUserService extends IService<SystemUser> {
 
+    IPage<SystemUserItemVo> getSystemUserItemVoByPage(Page<SystemUserItemVo> systemUserItemVoPage, SystemUserQueryVo queryVo);
+
+    SystemUserItemVo getSystemUserItemVoById(Long id);
 }

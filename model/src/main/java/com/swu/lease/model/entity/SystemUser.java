@@ -19,8 +19,8 @@ public class SystemUser extends BaseEntity {
     @TableField(value = "username")
     private String username;
 
-    @Schema(description = "密码")
-    @TableField(value = "password")
+    @Schema(description = "密码" )
+    @TableField(value = "password",select = false)
     private String password;
 
     @Schema(description = "姓名")
