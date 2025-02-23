@@ -1,6 +1,8 @@
 package com.swu.lease.web.admin.controller.system;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.swu.lease.common.result.Result;
 import com.swu.lease.model.entity.SystemUser;
@@ -50,18 +52,30 @@ public class SystemUserController {
     @Operation(summary = "判断后台用户名是否可用")
     @GetMapping("isUserNameAvailable")
     public Result<Boolean> isUsernameExists(@RequestParam String username) {
-        return Result.ok();
+        LambdaQueryWrapper<SystemUser> systemUserLambdaQueryWrapper = new LambdaQueryWrapper<SystemUser>();
+        systemUserLambdaQueryWrapper.eq(SystemUser::getUsername,username);
+        long count = systemUserService.count(systemUserLambdaQueryWrapper);
+        if(count>0){
+            return Result.ok(false);
+        }else {
+            return Result.ok(true);
+        }
     }
 
     @DeleteMapping("deleteById")
     @Operation(summary = "根据ID删除后台用户信息")
     public Result removeById(@RequestParam Long id) {
+        systemUserService.removeById(id);
         return Result.ok();
     }
 
     @Operation(summary = "根据ID修改后台用户状态")
     @PostMapping("updateStatusByUserId")
     public Result updateStatusByUserId(@RequestParam Long id, @RequestParam BaseStatus status) {
+        LambdaUpdateWrapper<SystemUser> systemUserLambdaUpdateWrapper = new LambdaUpdateWrapper<SystemUser>();
+        systemUserLambdaUpdateWrapper.eq(SystemUser::getId,id);
+        systemUserLambdaUpdateWrapper.set(SystemUser::getStatus,status);
+        systemUserService.update(systemUserLambdaUpdateWrapper);
         return Result.ok();
     }
 }
