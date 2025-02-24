@@ -14,10 +14,10 @@ import com.swu.lease.web.admin.vo.login.CaptchaVo;
 import com.swu.lease.web.admin.vo.login.LoginVo;
 import com.swu.lease.web.admin.vo.system.user.SystemUserInfoVo;
 import com.wf.captcha.SpecCaptcha;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.DigestUtils;
 import utils.JwtUtils;
 
 import java.util.Objects;
@@ -41,6 +41,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public String login(LoginVo loginVo) {
+        System.out.println(loginVo+"已经运行");
         String code = stringRedisTemplate.opsForValue().get(loginVo.getCaptchaKey());
         if(loginVo.getCaptchaCode()==null){
             throw new LeaseException(ResultCodeEnum.ADMIN_CAPTCHA_CODE_NOT_FOUND);
@@ -55,7 +56,8 @@ public class LoginServiceImpl implements LoginService {
         if (systemUser.getStatus() == BaseStatus.DISABLE){
             throw new LeaseException(ResultCodeEnum.ADMIN_ACCOUNT_DISABLED_ERROR);
         }
-        if (systemUser.getPassword().equals(DigestUtils.md5DigestAsHex(loginVo.getPassword().getBytes()))){
+        //5.校验用户密码
+        if (!systemUser.getPassword().equals(DigestUtils.md5Hex(loginVo.getPassword()))) {
             throw new LeaseException(ResultCodeEnum.ADMIN_ACCOUNT_ERROR);
         }
         return JwtUtils.createToken(systemUser.getId(), systemUser.getUsername());

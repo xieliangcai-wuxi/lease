@@ -43,7 +43,8 @@ public class SystemUserController {
     @PostMapping("saveOrUpdate")
     public Result saveOrUpdate(@RequestBody SystemUser systemUser) {
         if(systemUser.getPassword()!=null){
-            systemUser.setPassword(DigestUtils.md5DigestAsHex(systemUser.getPassword().getBytes()));
+            systemUser.setPassword(org.apache.commons.codec.digest.DigestUtils.md5Hex(systemUser.getPassword()));
+
         }
         systemUserService.saveOrUpdate(systemUser);
         return Result.ok();

@@ -9,33 +9,40 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 
 public class JwtUtils {
-    private static final String SECRET = "SDADAFDEFSDFSFS";
-    public static String createToken(Long id, String username) {
-        SecretKey secretKey = Keys.hmacShaKeyFor(SECRET.getBytes());
-        String compact = Jwts.builder()
-                        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
+
+    private static SecretKey secretKey = Keys.hmacShaKeyFor("CY29Eb04RPNyQPxACH2jBNWFGn0ypMhc".getBytes());
+    public static String createToken(Long userId, String username) {
+
+        return Jwts.builder()
                 .setSubject("LOGIN_USER")
+                .setExpiration(new Date(System.currentTimeMillis() + 3600000 * 24))
+                .claim("userId", userId)
                 .claim("username", username)
-                .claim("id", id)
-                .signWith(secretKey, SignatureAlgorithm.ES256)
+                .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
-        return compact;
     }
 
     public static Claims parseToken(String token) {
-        try {
-            Jws<Claims> claimsJws = Jwts.parserBuilder().setSigningKey(SECRET).build().parseClaimsJws(token);
-            Claims body = claimsJws.getBody();
-            return body;
-        }catch (ExpiredJwtException e) {
-            e.printStackTrace();
-            throw new LeaseException(ResultCodeEnum.TOKEN_EXPIRED);
-        }catch (JwtException e){
-            e.printStackTrace();
-            throw new LeaseException(ResultCodeEnum.TOKEN_INVALID);
+        System.out.println(token);
+        if (token == null) {
+            System.out.println("token is null");
+            throw new LeaseException(ResultCodeEnum.ADMIN_LOGIN_AUTH);
         }
 
-
+        try {
+            Jws<Claims> claimsJws = Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(token);
+            return claimsJws.getBody();
+        } catch (ExpiredJwtException e) {
+            throw new LeaseException(ResultCodeEnum.TOKEN_EXPIRED);
+        } catch (JwtException e) {
+            throw new LeaseException(ResultCodeEnum.TOKEN_INVALID);
+        }
     }
 
+
+
 }
+
