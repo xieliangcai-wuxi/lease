@@ -71,4 +71,13 @@ public class LoginServiceImpl implements LoginService {
         systemUserInfoVo.setAvatarUrl(systemUser.getAvatarUrl());
         return systemUserInfoVo;
     }
+
+    @Override
+    public SystemUserInfoVo getUserInfoById(Long userId) {
+        SystemUser systemUser = systemUserMapper.selectById(userId);
+        SystemUserInfoVo systemUserInfoVo = new SystemUserInfoVo();
+        systemUserInfoVo.setName(systemUser.getName());
+        systemUserInfoVo.setAvatarUrl(systemUser.getAvatarUrl());
+        return systemUserInfoVo;
+    }
 }

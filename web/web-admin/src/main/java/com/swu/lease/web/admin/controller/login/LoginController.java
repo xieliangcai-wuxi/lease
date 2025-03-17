@@ -30,15 +30,18 @@ public class LoginController {
     @Operation(summary = "登录")
     @PostMapping("login")
     public Result<String> login(@RequestBody LoginVo loginVo) {
-        String result = loginService.login(loginVo);
-        return Result.ok();
+
+        String jwt = loginService.login(loginVo);
+        return Result.ok(jwt);
     }
 
     @Operation(summary = "获取登陆用户个人信息")
     @GetMapping("info")
 
-    public Result<SystemUserInfoVo> info(@RequestHeader("access-token") String token) {
-        SystemUserInfoVo userInfo = loginService.getLoginUserInfo(LoginUserHolder.getLoginUser().getUserId());
-        return Result.ok(userInfo);
+    public Result<SystemUserInfoVo> info() {
+        System.out.println("线程"+Thread.currentThread().getName());
+        Long userId = LoginUserHolder.getLoginUser().getUserId();
+        SystemUserInfoVo systemUserInfoVo = loginService.getUserInfoById(userId);
+        return Result.ok(systemUserInfoVo);
     }
 }

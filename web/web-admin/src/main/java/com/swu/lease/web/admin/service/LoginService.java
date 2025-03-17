@@ -11,4 +11,6 @@ public interface LoginService {
     String login(LoginVo loginVo);
 
     SystemUserInfoVo getLoginUserInfo(Long userId);
+
+    SystemUserInfoVo getUserInfoById(Long userId);
 }
